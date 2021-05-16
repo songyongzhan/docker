@@ -1,0 +1,41 @@
+server {
+        listen       80;
+        server_name st.com;
+        root /data/www/st/;   
+        index  index.php index.html index.htm;
+        access_log /data/log/st/web.log  main;
+        error_log /data/log/st/error.log;     
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }       
+        location ^~ /api/ {
+                 proxy_pass http://127.0.0.1:8119;
+        }        
+        location ~ \.git/ {
+                deny all; 
+        }       
+        location ~ \.svn/ {
+                deny all; 
+        }       
+        location ~ \.php$ {
+                fastcgi_pass   127.0.0.1:9000;
+                fastcgi_index  index.php;
+                include        fastcgi_params;
+                fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include        fastcgi_params; 
+                fastcgi_connect_timeout 600;
+                fastcgi_send_timeout 600;
+                fastcgi_read_timeout 600;
+                fastcgi_buffers 2 256k;
+                fastcgi_buffer_size 128k;
+                fastcgi_busy_buffers_size 256k;
+                fastcgi_temp_file_write_size 256k;
+        }       
+        location /index.php {
+                fastcgi_pass 127.0.0.1:9000;
+                include        fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+        }       
+        error_page 404 /404.html;
+}       
+
