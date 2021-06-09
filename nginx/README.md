@@ -14,3 +14,15 @@ docker 文件记录
 
 
 ## 二、下载docker镜像使用
+
+```bash
+docker pull 
+```
+
+
+
+## 三、运行docker
+
+```bash
+docker run -itd --name my-nginx-2 -p 8080:80 -v /root/docker/nginx_git/logs:/usr/local/nginx/logs -v /root/docker/nginx_git/xm_data:/data -v /root/docker/nginx_git/conf:/usr/local/nginx/conf 22b6def4f8fa
+```
